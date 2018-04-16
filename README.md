@@ -31,11 +31,11 @@
 
 ## 项目抽象了很多内容，邮件消息抽象，可以实现简单文本邮件、模板邮件等；模板抽象，可以自定义实现各种模板，例如freemarker、velocity等等；
 
-## 先来一个hello world吧
+## 先来一个发送邮件的hello world吧
 
 ```java
 
-    package link.yangxin.email.java.sdk.test;
+package link.yangxin.email.java.sdk.test;
 
 import link.yangxin.email.java.sdk.client.EmailClient;
 import link.yangxin.email.java.sdk.message.EmailMessage;
@@ -82,3 +82,9 @@ public class EmailTest {
 
 ```
 
+
+## 不止如此，后续将加入收取邮件的相关功能。
+
+## 参考
+
+1. https://my.oschina.net/u/3747963/blog/1786247
