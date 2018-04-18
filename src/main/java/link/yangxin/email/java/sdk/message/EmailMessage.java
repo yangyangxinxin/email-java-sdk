@@ -59,7 +59,8 @@ public abstract class EmailMessage implements Serializable {
     /**
      * 邮件内容
      *
-     * @return
+     * @return 邮件内容
+     * @throws ParseException 当解析错误时抛出该异常
      */
     public abstract String getContent() throws ParseException;
 

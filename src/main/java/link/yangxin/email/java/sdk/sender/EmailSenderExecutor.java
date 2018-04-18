@@ -27,32 +27,32 @@ public class EmailSenderExecutor implements EmailSender {
     @Override
     public void send(EmailMessage emailMessage) {
         try {
-            // 根据邮件会话属性和密码验证器构造一个发送邮件的session
-            Session sendMailSession = Session.getInstance(emailClient.getProperties(), emailClient.getAuthenticator());
-            sendMailSession.setDebug(emailClient.isDebug());
+            emailMessage.validate();
+            MimeMessage mimeMessage = emailClient.createMimeMessage();
 
-            // 根据session创建一个邮件消息
-            Message mailMessage = new MimeMessage(sendMailSession);
             // 创建邮件发送者地址
             Address from = new InternetAddress(emailClient.getUsername());
             // 设置邮件消息的发送者
-            mailMessage.setFrom(from);
+            mimeMessage.setFrom(from);
             // 创建邮件的接收者地址，并设置到邮件消息中
+            mimeMessage.addRecipients(Message.RecipientType.TO, emailMessage.getToAddress());
 
-            mailMessage.setRecipients(Message.RecipientType.TO, emailMessage.getToAddress());
+            // 设置抄送人
             Address[] ccAddress = emailMessage.getCcAddress();
             if (ccAddress != null && ccAddress.length > 0) {
-                mailMessage.setRecipients(Message.RecipientType.CC, ccAddress);
+                mimeMessage.addRecipients(Message.RecipientType.CC, ccAddress);
             }
+
+            // 设置密送人
             Address[] bccAddress = emailMessage.getBccAddress();
             if (bccAddress != null && bccAddress.length > 0) {
-                mailMessage.setRecipients(Message.RecipientType.BCC, bccAddress);
+                mimeMessage.addRecipients(Message.RecipientType.BCC, bccAddress);
             }
 
             // 设置邮件消息的主题
-            mailMessage.setSubject(emailMessage.getSubject());
+            mimeMessage.setSubject(emailMessage.getSubject());
             // 设置邮件消息发送的时间
-            mailMessage.setSentDate(new Date());
+            mimeMessage.setSentDate(new Date());
             // MimeMultipart类是一个容器类，包含MimeBodyPart类型的对象
             Multipart mainPart = new MimeMultipart();
             MimeBodyPart mbpContent = new MimeBodyPart();
@@ -80,9 +80,9 @@ public class EmailSenderExecutor implements EmailSender {
                 }
 
             }
-            mailMessage.setContent(mainPart);
+            mimeMessage.setContent(mainPart);
             // 发送邮件
-            Transport.send(mailMessage);
+            Transport.send(mimeMessage);
         } catch (Exception e) {
             throw new EmailMessageException(e.getMessage());
         }

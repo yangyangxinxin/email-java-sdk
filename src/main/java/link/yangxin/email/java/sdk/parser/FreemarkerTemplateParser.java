@@ -15,12 +15,8 @@ public class FreemarkerTemplateParser implements TemplateParser {
 
     @Override
     public String parse(Template template) throws ParseException {
-        try {
-            Reader reader = new FileReader(new File(template.getPath()));
-
+        try (Reader reader = new FileReader(new File(template.getPath())); StringWriter result = new StringWriter()) {
             freemarker.template.Template temp = new freemarker.template.Template(System.currentTimeMillis() + "", reader, null, null);
-
-            StringWriter result = new StringWriter();
             temp.process(template.getParameters(), result);
             return result.toString();
         } catch (IOException | TemplateException e) {

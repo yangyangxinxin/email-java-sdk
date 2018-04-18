@@ -6,5 +6,4 @@ package link.yangxin.email.java.sdk.parser;
  */
 public interface Parser extends java.io.Serializable {
 
-
 }
