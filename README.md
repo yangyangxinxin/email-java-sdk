@@ -83,7 +83,36 @@ public class EmailTest {
 ```
 
 
-## 不止如此，后续将加入收取邮件的相关功能。
+## 接收邮件
+
+```java
+
+     @Test
+    public void testReceive() throws MessagingException, IOException {
+        EmailReceiveClient client = new EmailReceiveClient();
+        client.setPassword("");
+        client.setUsername("yangxin@ebaoquan.org");
+        client.setServer("mail.ebaoquan.org");
+        client.setProtocol("pop3");
+        List<Message> messages = client.getMessages();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        Message message = messages.get(0);
+        String content = MessageHelper.create(message).getContent();
+        System.out.println(content);
+
+        InputStream inputStream = new ByteArrayInputStream(content.getBytes());
+        OutputStream outputStream = new FileOutputStream(new File("a.html"));
+        int n ;
+        while((n = inputStream.read() ) != -1)
+            outputStream.write(n);
+
+        inputStream.close();
+        outputStream.close();
+    }
+
+```
+
 
 ## 参考
 
